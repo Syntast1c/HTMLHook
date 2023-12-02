@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook Sender</title>
+    <style>
+
+button {
+  width: fit-content;
+  min-width: 100px;
+  height: 45px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2.5px solid #E0E1E4;
+  box-shadow: 0px 0px 20px -20px;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.2s ease-in-out 0ms;
+  user-select: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+button:hover {
+  background-color: #F2F2F2;
+  box-shadow: 0px 0px 20px -18px;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+
+input {
+  font: inherit;
+  padding: 0.2em 0.5em;
+}
+    </style>
+</head>
+<body>
+
+    <label for="webhookUrl">Webhook URL:</label>
+    <input type="text" id="webhookUrl" placeholder="Enter webhook URL">
+    <button onclick="setWebhookUrl()">Set Webhook URL</button>
+    <br>
+    <br>
+    
+    <label for="message">Raid Message:</label>
+    <input type="text" id="message" placeholder="Type your message">
+    <button onclick="sendMessages()">Send to Discord</button>
+
+    <script>
+        var webhookUrl = ''; // Variable to store the webhook URL
+
+        function setWebhookUrl() {
+            // Get the webhook URL from the input field
+            webhookUrl = document.getElementById('webhookUrl').value;
+            alert('Webhook URL set successfully!');
+        }
+
+        function sendMessage(message) {
+            // Ensure that a webhook URL is set
+            if (!webhookUrl) {
+                alert('Please set the webhook URL first.');
+                return;
+            }
+
+            // Construct the payload
+            var payload = {
+                content: message
+            };
+
+            // Use the Fetch API to send the message to Discord
+            return fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+        }
+
+        function sendMessages() {
+            // Get the message from the input field
+            var message = document.getElementById('message').value;
+
+            // Send the message 10 times
+            for (let i = 0; i < 10; i++) {
+                sendMessage(message)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        console.log('fire');
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        console.log('waste');
+                    });
+            }
+        }
+    </script>
+
+</body>
+</html>
